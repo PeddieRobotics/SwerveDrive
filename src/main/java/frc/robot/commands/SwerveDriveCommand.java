@@ -30,21 +30,21 @@ public class SwerveDriveCommand extends CommandBase {
   public void execute() {
 
     double forward = -OI.getInstance().getForward();
-    if (forward < Constants.JOYSTICK_THRESHOLD) {
+    if (Math.abs(forward) < Constants.JOYSTICK_THRESHOLD) {
       forward = 0;
     }
     // deadband - In example code deadband is implemented using a method in the untilities class
     forward = Math.copySign(Math.pow(forward, 2.0), forward); // square joystick input while keeping its sign
 
     double strafe = -OI.getInstance().getStrafe();
-    if (strafe < Constants.JOYSTICK_THRESHOLD) {
+    if (Math.abs(strafe) < Constants.JOYSTICK_THRESHOLD) {
       strafe = 0;
     }
     // deadband - In example code deadband is implemented using a method in the untilities class
     strafe = Math.copySign(Math.pow(strafe, 2.0), strafe); // square joystick input while keeping its sign
 
     double rotation = -OI.getInstance().getRotation();
-    if (rotation < Constants.JOYSTICK_THRESHOLD) {
+    if (Math.abs(rotation) < Constants.JOYSTICK_THRESHOLD) {
       rotation = 0;
     }
     // deadband - In example code deadband is implemented using a method in the untilities class
