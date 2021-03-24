@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.SwerveDriveCommand;
@@ -89,7 +90,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
+
+    frontLeftDriveMotor.getPIDController().setP(0.00018);
+    frontRightDriveMotor.getPIDController().setP(0.00018);
+    backLeftDriveMotor.getPIDController().setP(0.00018);
+    backRightDriveMotor.getPIDController().setP(0.00018);
     
+    frontLeftAngleMotor.getPIDController().setP(0.018);
+    frontRightAngleMotor.getPIDController().setP(0.018);
+    backLeftAngleMotor.getPIDController().setP(0.018);
+    backRightAngleMotor.getPIDController().setP(0.018);
   }
 
   public static DrivetrainSubsystem getInstance(){
@@ -106,17 +116,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
 
   }
-
-  private double setTargetVelocity() {
-    return (0.0);
-  }
   
-  private double setTargetAngle() {
-    return (0.0);
-  }
-  
-  public void drive(Translation2d translation, double  rotation, boolean fieldOriented) {
-    rotation *= 2.0 / Math.hypot(Constants.WHEELBASE_M, Constants.TRACKWIDTH_M);
+  public void drive(Translation2d translation, double rotation, boolean fieldOriented) {
+    // rotation *= 2.0 / Math.hypot(Constants.WHEELBASE_M, Constants.TRACKWIDTH_M);
     ChassisSpeeds speeds;
     if(fieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation, Rotation2d.fromDegrees(gyroscope.getAngle()));
@@ -156,6 +158,30 @@ public class DrivetrainSubsystem extends SubsystemBase {
       backRightDriveMotor.getPIDController().setReference(backRightMotorSetpoint, ControlType.kVelocity);
       double backRightAngleSetpoint = backRight.angle.getRadians() / (2 * Math.PI); // This is in # of rotations
       backRightAngleMotor.getPIDController().setReference(backRightAngleSetpoint, ControlType.kPosition);
+
+  
+      SmartDashboard.putNumber("FL Motor WPILib m/s", frontLeft.speedMetersPerSecond);
+      SmartDashboard.putNumber("FL Angle WPILib rad", frontLeft.angle.getRadians());
+      SmartDashboard.putNumber("BL Motor WPILib m/s", backLeft.speedMetersPerSecond);
+      SmartDashboard.putNumber("BL Angle WPILib rad", backLeft.angle.getRadians());
+      SmartDashboard.putNumber("FR Motor WPILib m/s", frontRight.speedMetersPerSecond);
+      SmartDashboard.putNumber("FR Angle WPILib rad", frontRight.angle.getRadians());
+      SmartDashboard.putNumber("BR Motor WPILib m/s", backRight.speedMetersPerSecond);
+      SmartDashboard.putNumber("BR Angle WPILib rad", backRight.angle.getRadians());
+
+      SmartDashboard.putNumber("FL Motor Setpoint", frontLeftMotorSetpoint);
+      SmartDashboard.putNumber("FL Angle Setpoint", frontLeftAngleSetpoint);
+      SmartDashboard.putNumber("BL Motor Setpoint", backLeftMotorSetpoint);
+      SmartDashboard.putNumber("BL Angle Setpoint", backLeftAngleSetpoint);
+      SmartDashboard.putNumber("FR Motor Setpoint", frontRightMotorSetpoint);
+      SmartDashboard.putNumber("FR Angle Setpoint", frontRightAngleSetpoint);
+      SmartDashboard.putNumber("BR Motor Setpoint", backRightMotorSetpoint);
+      SmartDashboard.putNumber("BR Angle Setpoint", backRightAngleSetpoint);
+
+      SmartDashboard.putNumber("FR Motor P", frontRightDriveMotor.getPIDController().getP());
+      SmartDashboard.putNumber("FR Motor I", frontRightDriveMotor.getPIDController().getI());
+      SmartDashboard.putNumber("FR Motor D", frontRightDriveMotor.getPIDController().getD());
+      
   }
 
 public void resetGyroscope() {
