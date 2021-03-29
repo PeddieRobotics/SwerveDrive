@@ -119,12 +119,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
   
   public void drive(Translation2d translation, double rotation, boolean fieldOriented) {
     // rotation *= 2.0 / Math.hypot(Constants.WHEELBASE_M, Constants.TRACKWIDTH_M);
+    SmartDashboard.putNumber("getX", translation.getX());
+    SmartDashboard.putNumber("getY", translation.getY());
+
     ChassisSpeeds speeds;
     if(fieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation, Rotation2d.fromDegrees(gyroscope.getAngle()));
     } else {
       speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
     }
+    SmartDashboard.putNumber("ChassisSpeed x", speeds.vxMetersPerSecond);
+    SmartDashboard.putNumber("ChassisSpeed y", speeds.vyMetersPerSecond);
+    SmartDashboard.putNumber("ChassisSpeed rotation in r/s", speeds.omegaRadiansPerSecond);
 
       SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds); //makes a SwerveModuleState array out of the ChassisSpeeds
        // Front left module state
@@ -161,13 +167,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   
       SmartDashboard.putNumber("FL Motor WPILib m/s", frontLeft.speedMetersPerSecond);
-      SmartDashboard.putNumber("FL Angle WPILib rad", frontLeft.angle.getRadians());
+      // SmartDashboard.putNumber("FL Angle WPILib rad", frontLeft.angle.getRadians());
       SmartDashboard.putNumber("BL Motor WPILib m/s", backLeft.speedMetersPerSecond);
-      SmartDashboard.putNumber("BL Angle WPILib rad", backLeft.angle.getRadians());
+      // SmartDashboard.putNumber("BL Angle WPILib rad", backLeft.angle.getRadians());
       SmartDashboard.putNumber("FR Motor WPILib m/s", frontRight.speedMetersPerSecond);
-      SmartDashboard.putNumber("FR Angle WPILib rad", frontRight.angle.getRadians());
+      // SmartDashboard.putNumber("FR Angle WPILib rad", frontRight.angle.getRadians());
       SmartDashboard.putNumber("BR Motor WPILib m/s", backRight.speedMetersPerSecond);
-      SmartDashboard.putNumber("BR Angle WPILib rad", backRight.angle.getRadians());
+      // SmartDashboard.putNumber("BR Angle WPILib rad", backRight.angle.getRadians());
 
       SmartDashboard.putNumber("FL Motor Setpoint", frontLeftMotorSetpoint);
       SmartDashboard.putNumber("FL Angle Setpoint", frontLeftAngleSetpoint);

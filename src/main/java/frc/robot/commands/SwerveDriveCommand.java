@@ -38,7 +38,7 @@ public class SwerveDriveCommand extends CommandBase {
     //}
     // deadband - In example code deadband is implemented using a method in the untilities class
     forward = Math.copySign(Math.pow(forward, 2.0), forward); // square joystick input while keeping its sign
-
+    
     double strafe = -OI.getInstance().getStrafe();
     SmartDashboard.putNumber("Strafe after neg sign", strafe);
 
@@ -47,8 +47,10 @@ public class SwerveDriveCommand extends CommandBase {
     //}
     // deadband - In example code deadband is implemented using a method in the untilities class
     strafe = Math.copySign(Math.pow(strafe, 2.0), strafe); // square joystick input while keeping its sign
+    
+    
 
-    double rotation = -OI.getInstance().getRotation();
+    double rotation = -OI.getInstance().getRotation();  
     SmartDashboard.putNumber("Rotation after neg sign", rotation);
     //if (Math.abs(rotation) < Constants.JOYSTICK_THRESHOLD) {
     //  rotation = 0;
