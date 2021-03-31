@@ -23,7 +23,8 @@ public final class Constants {
     public static final double WHEELDIAMETER_IN = 4; // This is in inches
     public static final double WHEELRADIUS_M = (WHEELDIAMETER_IN / 2) * INCHES_TO_METERS; // Converting wheel radius to meters
     public static final double METERS_PER_SEC_TO_RPM = 30 / (Math.PI * WHEELRADIUS_M); // Converting Meters Per Second to Rotations Per Minute
-    public static final double GEAR_RATIO = 8.16; // Gear ratio for the standard wheel (motor to wheel rotation: 8.16:1) 
+    public static final double DRIVE_GEAR_RATIO = 8.16; // Gear ratio for the standard wheel (motor to wheel rotation: 8.16:1)
+    public static final double ANGLE_GEAR_RATIO = 12.8; 
 
 }
 /*

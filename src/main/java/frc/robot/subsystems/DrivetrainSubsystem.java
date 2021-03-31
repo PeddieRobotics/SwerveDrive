@@ -145,24 +145,24 @@ public class DrivetrainSubsystem extends SubsystemBase {
       // Back right module state
       SwerveModuleState backRight = states[3];
      
-      double frontLeftMotorSetpoint = frontLeft.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.GEAR_RATIO; // This is in rpm
+      double frontLeftMotorSetpoint = frontLeft.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.DRIVE_GEAR_RATIO; // This is in rpm
       frontLeftDriveMotor.getPIDController().setReference(frontLeftMotorSetpoint, ControlType.kVelocity); 
-      double frontLeftAngleSetpoint = frontLeft.angle.getRadians() / (2 * Math.PI);  // This is in # of rotations
+      double frontLeftAngleSetpoint = frontLeft.angle.getRadians() / (2 * Math.PI) * Constants.ANGLE_GEAR_RATIO;  // This is in # of rotations
       frontLeftAngleMotor.getPIDController().setReference(frontLeftAngleSetpoint, ControlType.kPosition);
 
-      double frontRightMotorSetpoint = frontRight.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.GEAR_RATIO; // This is in rpm
+      double frontRightMotorSetpoint = frontRight.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.DRIVE_GEAR_RATIO; // This is in rpm
       frontRightDriveMotor.getPIDController().setReference(frontRightMotorSetpoint, ControlType.kVelocity);
-      double frontRightAngleSetpoint = frontRight.angle.getRadians() / (2 * Math.PI);  // This is in # of rotations
+      double frontRightAngleSetpoint = frontRight.angle.getRadians() / (2 * Math.PI) * Constants.ANGLE_GEAR_RATIO;  // This is in # of rotations
       frontRightAngleMotor.getPIDController().setReference(frontRightAngleSetpoint, ControlType.kPosition);
       
-      double backLeftMotorSetpoint = backLeft.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.GEAR_RATIO; // This is in rpm
+      double backLeftMotorSetpoint = backLeft.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.DRIVE_GEAR_RATIO; // This is in rpm
       backLeftDriveMotor.getPIDController().setReference(backLeftMotorSetpoint, ControlType.kVelocity);
-      double backLeftAngleSetpoint = backLeft.angle.getRadians() / (2 * Math.PI);  // This is in # of rotations
+      double backLeftAngleSetpoint = backLeft.angle.getRadians() / (2 * Math.PI) * Constants.ANGLE_GEAR_RATIO;  // This is in # of rotations
       backLeftAngleMotor.getPIDController().setReference(backLeftAngleSetpoint, ControlType.kPosition);
 
-      double backRightMotorSetpoint = backRight.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.GEAR_RATIO;// This is in rpm
+      double backRightMotorSetpoint = backRight.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.DRIVE_GEAR_RATIO;// This is in rpm
       backRightDriveMotor.getPIDController().setReference(backRightMotorSetpoint, ControlType.kVelocity);
-      double backRightAngleSetpoint = backRight.angle.getRadians() / (2 * Math.PI); // This is in # of rotations
+      double backRightAngleSetpoint = backRight.angle.getRadians() / (2 * Math.PI) * Constants.ANGLE_GEAR_RATIO; // This is in # of rotations
       backRightAngleMotor.getPIDController().setReference(backRightAngleSetpoint, ControlType.kPosition);
 
   
