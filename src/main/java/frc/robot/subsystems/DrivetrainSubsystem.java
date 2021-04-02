@@ -116,6 +116,10 @@ public SwerveModule getBackRightSwerveModule(){
   return backRightSwerveModule;
 }
 
+public SwerveModule[] getSwerveModules(){
+  return swerveModules;
+}
+
 @Override
 public void periodic(){
   
@@ -132,39 +136,39 @@ public void periodic(){
   }
 
   try{
-    SmartDashboard.putNumber("FL Motor State", swerveModules[0].getCurrentState().speedMetersPerSecond);
+    SmartDashboard.putNumber("FL Drive State", swerveModules[0].getCurrentState().speedMetersPerSecond);
     SmartDashboard.putNumber("FL Angle State", swerveModules[0].getCurrentState().angle.getRadians());
-    SmartDashboard.putNumber("BL Motor State", swerveModules[1].getCurrentState().speedMetersPerSecond);
+    SmartDashboard.putNumber("BL Drive State", swerveModules[1].getCurrentState().speedMetersPerSecond);
     SmartDashboard.putNumber("BL Angle State", swerveModules[1].getCurrentState().angle.getRadians());
-    SmartDashboard.putNumber("FR Motor State", swerveModules[2].getCurrentState().speedMetersPerSecond);
+    SmartDashboard.putNumber("FR Drive State", swerveModules[2].getCurrentState().speedMetersPerSecond);
     SmartDashboard.putNumber("FR Angle State", swerveModules[2].getCurrentState().angle.getRadians());
-    SmartDashboard.putNumber("BR Motor State", swerveModules[3].getCurrentState().speedMetersPerSecond);
+    SmartDashboard.putNumber("BR Drive State", swerveModules[3].getCurrentState().speedMetersPerSecond);
     SmartDashboard.putNumber("BR Angle State", swerveModules[3].getCurrentState().angle.getRadians());
   } catch(NullPointerException e){
   }
 
 
   try{
-    SmartDashboard.putNumber("FL Motor Optimized", swerveModules[0].getDesiredState().speedMetersPerSecond);
+    SmartDashboard.putNumber("FL Drive Optimized", swerveModules[0].getDesiredState().speedMetersPerSecond);
     SmartDashboard.putNumber("FL Angle Optimized", swerveModules[0].getDesiredState().angle.getRadians());
-    SmartDashboard.putNumber("BL Motor Optimized", swerveModules[1].getDesiredState().speedMetersPerSecond);
+    SmartDashboard.putNumber("BL Drive Optimized", swerveModules[1].getDesiredState().speedMetersPerSecond);
     SmartDashboard.putNumber("BL Angle Optimized", swerveModules[1].getDesiredState().angle.getRadians());
-    SmartDashboard.putNumber("FR Motor Optimized", swerveModules[2].getDesiredState().speedMetersPerSecond);
+    SmartDashboard.putNumber("FR Drive Optimized", swerveModules[2].getDesiredState().speedMetersPerSecond);
     SmartDashboard.putNumber("FR Angle Optimized", swerveModules[2].getDesiredState().angle.getRadians());
-    SmartDashboard.putNumber("BR Motor Optimized", swerveModules[3].getDesiredState().speedMetersPerSecond);
+    SmartDashboard.putNumber("BR Drive Optimized", swerveModules[3].getDesiredState().speedMetersPerSecond);
     SmartDashboard.putNumber("BR Angle Optimized", swerveModules[3].getDesiredState().angle.getRadians());
   } catch(NullPointerException e){
   }
 
 
   try{
-    SmartDashboard.putNumber("FL Motor Setpoint", swerveModules[0].getDriveMotorSetpoint());
+    SmartDashboard.putNumber("FL Drive Setpoint", swerveModules[0].getDriveMotorSetpoint());
     SmartDashboard.putNumber("FL Angle Setpoint", swerveModules[0].getAngleMotorSetpoint());
-    SmartDashboard.putNumber("BL Motor Setpoint", swerveModules[1].getDriveMotorSetpoint());
+    SmartDashboard.putNumber("BL Drive Setpoint", swerveModules[1].getDriveMotorSetpoint());
     SmartDashboard.putNumber("BL Angle Setpoint", swerveModules[1].getAngleMotorSetpoint());
-    SmartDashboard.putNumber("FR Motor Setpoint", swerveModules[2].getDriveMotorSetpoint());
+    SmartDashboard.putNumber("FR Drive Setpoint", swerveModules[2].getDriveMotorSetpoint());
     SmartDashboard.putNumber("FR Angle Setpoint", swerveModules[2].getAngleMotorSetpoint());
-    SmartDashboard.putNumber("BR Motor Setpoint", swerveModules[3].getDriveMotorSetpoint());
+    SmartDashboard.putNumber("BR Drive Setpoint", swerveModules[3].getDriveMotorSetpoint());
     SmartDashboard.putNumber("BR Angle Setpoint", swerveModules[3].getAngleMotorSetpoint());
   } catch(NullPointerException e){
   }
