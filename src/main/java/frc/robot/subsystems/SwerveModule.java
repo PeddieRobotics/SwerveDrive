@@ -45,7 +45,7 @@ public class SwerveModule {
     }
     
     public SwerveModuleState getCurrentState(){
-        return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(m_turningEncoder.getPosition()));
+        return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(normalizeAngle(m_turningEncoder.getPosition())));
     }
 
     public SwerveModuleState getDesiredState(){
@@ -67,5 +67,16 @@ public class SwerveModule {
       driveMotor.getPIDController().setReference(driveSetpoint, ControlType.kVelocity); 
       angleSetpoint = (state.angle.getRadians() / (2.0 * Math.PI)) * Constants.ANGLE_GEAR_RATIO;  // This is in # of rotations
       angleMotor.getPIDController().setReference(angleSetpoint, ControlType.kPosition);
+    }
+
+    public double normalizeAngle(double rad){
+        double angle = rad % (2.0 * Math.PI);
+        if (angle > Math.PI){
+            angle = -(angle - Math.PI);
+        }
+        if (angle < -Math.PI){
+            angle = -(angle + Math.PI);
+        }
+        return angle;
     }
 }
