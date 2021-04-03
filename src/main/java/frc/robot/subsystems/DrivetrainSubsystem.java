@@ -78,7 +78,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if(fieldOriented) {
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation, Rotation2d.fromDegrees(gyroscope.getAngle()));
     } else {
-      speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
+      speeds = new ChassisSpeeds(3*translation.getX(), 3*translation.getY(), 5.0*rotation);
     }
 
     SmartDashboard.putNumber("ChassisSpeed x (m/s)", speeds.vxMetersPerSecond);
@@ -91,6 +91,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // Update each swerve module according to the SwerveModuleStates computed by WPILib
     for(int i = 0; i < swerveModules.length; i++){
+      //swerveModules[i].setPIDFAngle(SmartDashboard.getNumber("Drive P", 0.0), SmartDashboard.getNumber("Drive I", 0.0), SmartDashboard.getNumber("Drive D", 0.0), SmartDashboard.getNumber("Drive FF", 0.0));
+      //swerveModules[i].setPIDFAngle(SmartDashboard.getNumber("Angle P", 0.0), SmartDashboard.getNumber("Angle I", 0.0), SmartDashboard.getNumber("Angle D", 0.0), SmartDashboard.getNumber("Angle FF", 0.0));
       swerveModules[i].setDesiredState(swerveModuleStates[i]);
     }
 
@@ -157,19 +159,6 @@ public void periodic(){
     SmartDashboard.putNumber("FR Angle Optimized", swerveModules[2].getDesiredState().angle.getRadians());
     SmartDashboard.putNumber("BR Drive Optimized", swerveModules[3].getDesiredState().speedMetersPerSecond);
     SmartDashboard.putNumber("BR Angle Optimized", swerveModules[3].getDesiredState().angle.getRadians());
-  } catch(NullPointerException e){
-  }
-
-
-  try{
-    SmartDashboard.putNumber("FL Drive Setpoint", swerveModules[0].getDriveMotorSetpoint());
-    SmartDashboard.putNumber("FL Angle Setpoint", swerveModules[0].getAngleMotorSetpoint());
-    SmartDashboard.putNumber("BL Drive Setpoint", swerveModules[1].getDriveMotorSetpoint());
-    SmartDashboard.putNumber("BL Angle Setpoint", swerveModules[1].getAngleMotorSetpoint());
-    SmartDashboard.putNumber("FR Drive Setpoint", swerveModules[2].getDriveMotorSetpoint());
-    SmartDashboard.putNumber("FR Angle Setpoint", swerveModules[2].getAngleMotorSetpoint());
-    SmartDashboard.putNumber("BR Drive Setpoint", swerveModules[3].getDriveMotorSetpoint());
-    SmartDashboard.putNumber("BR Angle Setpoint", swerveModules[3].getAngleMotorSetpoint());
   } catch(NullPointerException e){
   }
 

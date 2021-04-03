@@ -27,7 +27,7 @@ public class OI {
       }
 
     public double getForward(){
-        if(Math.abs(driverXboxController.getRawAxis(1)) > 0.1){
+        if(Math.abs(driverXboxController.getRawAxis(1)) > 0.2){
             return driverXboxController.getRawAxis(1); 
         }
         else{
@@ -35,7 +35,7 @@ public class OI {
         }
     }
     public double getStrafe(){
-        if(Math.abs(driverXboxController.getRawAxis(0)) > 0.1){
+        if(Math.abs(driverXboxController.getRawAxis(0)) > 0.2){
             return driverXboxController.getRawAxis(0);
         }
         else{
@@ -43,7 +43,7 @@ public class OI {
         }
     }
     public double getRotation(){
-        if(Math.abs(driverXboxController.getRawAxis(4)) > 0.1){
+        if(Math.abs(driverXboxController.getRawAxis(4)) > 0.2){
             return driverXboxController.getRawAxis(4);
         }
         else{

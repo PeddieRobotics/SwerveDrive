@@ -32,6 +32,15 @@ public class RobotContainer {
 
     // Set up a default command to ensure the robot drives by default
     m_DrivetrainSubsystem.setDefaultCommand(new SwerveDriveCommand());
+
+    /*SmartDashboard.putNumber("Drive P", 0.0);
+    SmartDashboard.putNumber("Drive I", 0.0);
+    SmartDashboard.putNumber("Drive D", 0.0);
+    SmartDashboard.putNumber("Drive FF", 0.0);
+    SmartDashboard.putNumber("Angle P", 0.0);
+    SmartDashboard.putNumber("Angle I", 0.0);
+    SmartDashboard.putNumber("Angle D", 0.0);
+    SmartDashboard.putNumber("Angle FF", 0.0);*/
   }
 
   
@@ -81,12 +90,13 @@ public void testAllSystems(){
 public void reportAllSwerveModuleStates(){
   SmartDashboard.putNumber("FL Drive State", m_DrivetrainSubsystem.getSwerveModules()[0].getCurrentState().speedMetersPerSecond);
   SmartDashboard.putNumber("FL Angle State", m_DrivetrainSubsystem.getSwerveModules()[0].getCurrentState().angle.getRadians());
-  SmartDashboard.putNumber("BL Drive State", m_DrivetrainSubsystem.getSwerveModules()[1].getCurrentState().speedMetersPerSecond);
-  SmartDashboard.putNumber("BL Angle State", m_DrivetrainSubsystem.getSwerveModules()[1].getCurrentState().angle.getRadians());
-  SmartDashboard.putNumber("FR Drive State", m_DrivetrainSubsystem.getSwerveModules()[2].getCurrentState().speedMetersPerSecond);
-  SmartDashboard.putNumber("FR Angle State", m_DrivetrainSubsystem.getSwerveModules()[2].getCurrentState().angle.getRadians());
+  SmartDashboard.putNumber("FR Drive State", m_DrivetrainSubsystem.getSwerveModules()[1].getCurrentState().speedMetersPerSecond);
+  SmartDashboard.putNumber("FR Angle State", m_DrivetrainSubsystem.getSwerveModules()[1].getCurrentState().angle.getRadians());
+  SmartDashboard.putNumber("BL Drive State", m_DrivetrainSubsystem.getSwerveModules()[2].getCurrentState().speedMetersPerSecond);
+  SmartDashboard.putNumber("BL Angle State", m_DrivetrainSubsystem.getSwerveModules()[2].getCurrentState().angle.getRadians());
   SmartDashboard.putNumber("BR Drive State", m_DrivetrainSubsystem.getSwerveModules()[3].getCurrentState().speedMetersPerSecond);
   SmartDashboard.putNumber("BR Angle State", m_DrivetrainSubsystem.getSwerveModules()[3].getCurrentState().angle.getRadians());
+
 }
 
 }
