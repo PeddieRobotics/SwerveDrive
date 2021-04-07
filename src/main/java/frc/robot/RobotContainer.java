@@ -33,14 +33,14 @@ public class RobotContainer {
     // Set up a default command to ensure the robot drives by default
     m_DrivetrainSubsystem.setDefaultCommand(new SwerveDriveCommand());
 
-    /*SmartDashboard.putNumber("Drive P", 0.0);
+    SmartDashboard.putNumber("Drive P", 0.0);
     SmartDashboard.putNumber("Drive I", 0.0);
     SmartDashboard.putNumber("Drive D", 0.0);
     SmartDashboard.putNumber("Drive FF", 0.0);
     SmartDashboard.putNumber("Angle P", 0.0);
     SmartDashboard.putNumber("Angle I", 0.0);
     SmartDashboard.putNumber("Angle D", 0.0);
-    SmartDashboard.putNumber("Angle FF", 0.0);*/
+    SmartDashboard.putNumber("Angle FF", 0.0);
   }
 
   

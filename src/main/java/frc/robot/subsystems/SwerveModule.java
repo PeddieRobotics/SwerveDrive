@@ -22,6 +22,8 @@ public class SwerveModule {
 
     private final CANEncoder m_driveEncoder, m_turningEncoder;
 
+    private final PIDController pidController;
+
     public SwerveModule(int driveMotorCanId, int angleMotorCanId){
 
         driveMotor = new CANSparkMax(driveMotorCanId, MotorType.kBrushless);
@@ -47,6 +49,7 @@ public class SwerveModule {
         m_driveEncoder.setVelocityConversionFactor(1/(Constants.DRIVE_GEAR_RATIO *Constants.METERS_PER_SEC_TO_RPM));
         m_turningEncoder = angleMotor.getEncoder();
         m_turningEncoder.setPositionConversionFactor((2.0*Math.PI)/Constants.ANGLE_GEAR_RATIO);
+        pidController = new PIDController(0.2, 0, 0);
     }
 
     public void setDriveMotor(double setpoint){
