@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import frc.robot.Constants;
 
@@ -22,7 +23,9 @@ public class SwerveModule {
 
     private final CANEncoder m_driveEncoder, m_turningEncoder;
 
-    private final PIDController pidController;
+    private final ProfiledPIDController anglePIDController;
+
+    private double desiredAngle;
 
     public SwerveModule(int driveMotorCanId, int angleMotorCanId){
 
@@ -49,7 +52,8 @@ public class SwerveModule {
         m_driveEncoder.setVelocityConversionFactor(1/(Constants.DRIVE_GEAR_RATIO *Constants.METERS_PER_SEC_TO_RPM));
         m_turningEncoder = angleMotor.getEncoder();
         m_turningEncoder.setPositionConversionFactor((2.0*Math.PI)/Constants.ANGLE_GEAR_RATIO);
-        pidController = new PIDController(0.2, 0, 0);
+        anglePIDController = new ProfiledPIDController(0.15, 0, 0, new TrapezoidProfile.Constraints(2*Math.PI, 2*Math.PI));
+        anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     public void setDriveMotor(double setpoint){
@@ -71,7 +75,9 @@ public class SwerveModule {
     public void setDesiredState(SwerveModuleState desiredState){
       state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getPosition()));
       driveMotor.getPIDController().setReference(state.speedMetersPerSecond, ControlType.kVelocity); 
-      angleMotor.getPIDController().setReference(state.angle.getRadians(), ControlType.kPosition);
+      desiredAngle = anglePIDController.calculate(m_turningEncoder.getPosition(), state.angle.getRadians());
+      angleMotor.set(desiredAngle);
+      //angleMotor.getPIDController().setReference(state.angle.getRadians(), ControlType.kPosition);
     }
 
     public double normalizeAngle(double rad){
@@ -99,5 +105,9 @@ public class SwerveModule {
         angleMotor.getPIDController().setD(d);
         angleMotor.getPIDController().setFF(ff);
         
+    }
+
+    public double getDesiredAngle(){
+        return desiredAngle;
     }
 }

@@ -124,7 +124,16 @@ public SwerveModule[] getSwerveModules(){
 
 @Override
 public void periodic(){
-  
+  try {
+    SmartDashboard.putNumber("FL Desired Angle", swerveModules[0].getDesiredAngle());
+    SmartDashboard.putNumber("FR Desired Angle", swerveModules[1].getDesiredAngle());
+    SmartDashboard.putNumber("BL Desired Angle", swerveModules[2].getDesiredAngle());
+    SmartDashboard.putNumber("BR Desired Angle", swerveModules[3].getDesiredAngle());
+  } catch (Exception e) {
+    //TODO: handle exception
+  }
+
+
   try{
     SmartDashboard.putNumber("FL Motor WPILib m/s", swerveModuleStates[0].speedMetersPerSecond);
     SmartDashboard.putNumber("FL Angle WPILib rad", swerveModuleStates[0].angle.getRadians());
