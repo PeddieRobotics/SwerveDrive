@@ -23,9 +23,13 @@ public class SwerveModule {
 
     private final CANEncoder m_driveEncoder, m_turningEncoder;
 
-    private final ProfiledPIDController anglePIDController;
+    private final PIDController anglePIDController;
 
-    private double desiredAngle;
+    private double angleOutput;
+
+    private final SimpleMotorFeedforward angleFF;
+
+    private double finalAngle;
 
     public SwerveModule(int driveMotorCanId, int angleMotorCanId){
 
@@ -33,27 +37,31 @@ public class SwerveModule {
         angleMotor = new CANSparkMax(angleMotorCanId, MotorType.kBrushless);
         // left drive pid
         if(driveMotorCanId == 10 || driveMotorCanId == 4){
-            driveMotor.getPIDController().setP(0.5);
+            driveMotor.getPIDController().setP(0.15);
         }
         // left angle pid
         if(angleMotorCanId == 1 || angleMotorCanId == 5){
-            angleMotor.getPIDController().setP(0.5);
+            angleMotor.getPIDController().setP(0.15);
         }
         // right drive pid
         if(driveMotorCanId == 2 || driveMotorCanId == 6){
-            driveMotor.getPIDController().setP(0.5);
+            driveMotor.getPIDController().setP(0.15);
         }
         // right angle pid
         if(angleMotorCanId == 3 || angleMotorCanId == 7){
-            angleMotor.getPIDController().setP(0.5);
+            angleMotor.getPIDController().setP(0.15);
         }
     
         m_driveEncoder = driveMotor.getEncoder();
         m_driveEncoder.setVelocityConversionFactor(1/(Constants.DRIVE_GEAR_RATIO *Constants.METERS_PER_SEC_TO_RPM));
         m_turningEncoder = angleMotor.getEncoder();
         m_turningEncoder.setPositionConversionFactor((2.0*Math.PI)/Constants.ANGLE_GEAR_RATIO);
-        anglePIDController = new ProfiledPIDController(0.15, 0, 0, new TrapezoidProfile.Constraints(2*Math.PI, 2*Math.PI));
+        
+        anglePIDController = new PIDController(0.15, 0, 0);
+        //anglePIDController = new ProfiledPIDController(0.5, 0, 0, new TrapezoidProfile.Constraints(2*Math.PI, 2*Math.PI));
         anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
+        angleFF = new SimpleMotorFeedforward(1, 0.5);
+
     }
 
     public void setDriveMotor(double setpoint){
@@ -66,6 +74,7 @@ public class SwerveModule {
     
     public SwerveModuleState getCurrentState(){
         return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(normalizeAngle(m_turningEncoder.getPosition())));
+        //return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(m_turningEncoder.getPosition()));
     }
 
     public SwerveModuleState getDesiredState(){
@@ -74,9 +83,14 @@ public class SwerveModule {
 
     public void setDesiredState(SwerveModuleState desiredState){
       state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getPosition()));
+    
       driveMotor.getPIDController().setReference(state.speedMetersPerSecond, ControlType.kVelocity); 
-      desiredAngle = anglePIDController.calculate(m_turningEncoder.getPosition(), state.angle.getRadians());
-      angleMotor.set(desiredAngle);
+      
+      angleOutput = anglePIDController.calculate(normalizeAngle(m_turningEncoder.getPosition()), state.angle.getRadians());
+      finalAngle = angleOutput;
+      //final double angleFFUpdate = angleFF.calculate(anglePIDController.getSetpoint().velocity);
+      angleMotor.set(angleOutput);
+  
       //angleMotor.getPIDController().setReference(state.angle.getRadians(), ControlType.kPosition);
     }
 
@@ -107,7 +121,13 @@ public class SwerveModule {
         
     }
 
-    public double getDesiredAngle(){
-        return desiredAngle;
+    public double getAngleOutput(){
+        return angleOutput;
     }
+
+    public double getFinalAngle(){
+        return finalAngle;
+    }
+
+
 }
