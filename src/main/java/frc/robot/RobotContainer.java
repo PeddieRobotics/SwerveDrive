@@ -67,7 +67,7 @@ public void setupSmartDashboardTestMode() {
 
 
 public void testAllSystems(){
-  m_DrivetrainSubsystem.setMotor(10 ,SmartDashboard.getNumber("Front Left Drive",0.0 ));
+  m_DrivetrainSubsystem.setMotor(10 ,SmartDashboard.getNumber("Front Left Drive", 0.0));
   m_DrivetrainSubsystem.setMotor(1 ,SmartDashboard.getNumber("Front Left Angle", 0.0));
   m_DrivetrainSubsystem.setMotor(2 ,SmartDashboard.getNumber("Front Right Drive", 0.0));
   m_DrivetrainSubsystem.setMotor(3 ,SmartDashboard.getNumber("Front Right Angle", 0.0));
