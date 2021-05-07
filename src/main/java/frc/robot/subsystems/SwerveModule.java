@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
@@ -13,6 +15,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.util.Units;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -23,6 +26,10 @@ public class SwerveModule {
 
     private final CANEncoder m_driveEncoder, m_turningEncoder;
 
+    private final CANCoder canCoder;
+    
+    private final Rotation2d offset;
+
     private final PIDController anglePIDController;
 
     private double angleOutput;
@@ -31,10 +38,12 @@ public class SwerveModule {
 
     private double finalAngle;
 
-    public SwerveModule(int driveMotorCanId, int angleMotorCanId){
+    public SwerveModule(int driveMotorCanId, int angleMotorCanId, int canCoderId, double offsetAngleRadians){
 
         driveMotor = new CANSparkMax(driveMotorCanId, MotorType.kBrushless);
         angleMotor = new CANSparkMax(angleMotorCanId, MotorType.kBrushless);
+        canCoder = new CANCoder(canCoderId);
+        offset = new Rotation2d(offsetAngleRadians);
         // left drive pid
         if(driveMotorCanId == 10 || driveMotorCanId == 4){
             driveMotor.getPIDController().setP(0.15);
@@ -61,6 +70,8 @@ public class SwerveModule {
         //anglePIDController = new ProfiledPIDController(0.5, 0, 0, new TrapezoidProfile.Constraints(2*Math.PI, 2*Math.PI));
         anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
         angleFF = new SimpleMotorFeedforward(1, 0.5);
+
+        canCoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
 
     }
 
@@ -103,6 +114,20 @@ public class SwerveModule {
             angle = angle + 2.0*Math.PI;
         }
         return angle;
+    }
+
+    public Rotation2d getCanCoderAngle() {
+
+        double unsignedAngle = (Units.degreesToRadians(canCoder.getAbsolutePosition()) - offset.getRadians()) % (2 * Math.PI);
+
+        return new Rotation2d(unsignedAngle);
+
+    }
+
+    public void initRotationOffset() {
+
+        m_turningEncoder.setPosition(getCanCoderAngle().getRadians());
+
     }
 
     public void setPIDFDrive(double p, double i, double d, double ff){

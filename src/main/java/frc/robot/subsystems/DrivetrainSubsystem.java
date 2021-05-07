@@ -55,10 +55,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
 
-    frontLeftSwerveModule = new SwerveModule(10,1);
-    frontRightSwerveModule = new SwerveModule(2,3);
-    backLeftSwerveModule = new SwerveModule(4,5);
-    backRightSwerveModule = new SwerveModule(6,7);
+    frontLeftSwerveModule = new SwerveModule(10,1,13,Math.PI/2);//last 2 are random vals. They are canCoder ID and offset angle in radians
+    frontRightSwerveModule = new SwerveModule(2,3,14,Math.PI/2);//last 2 are random vals. They are canCoder ID and offset angle in radians
+    backLeftSwerveModule = new SwerveModule(4,5,15,Math.PI/2);//last 2 are random vals. They are canCoder ID and offset angle in radians
+    backRightSwerveModule = new SwerveModule(6,7,16,Math.PI/2);//last 2 are random vals. They are canCoder ID and offset angle in radianss
     swerveModules = new SwerveModule[]{frontLeftSwerveModule, frontRightSwerveModule, backLeftSwerveModule, backRightSwerveModule};
   }
 
