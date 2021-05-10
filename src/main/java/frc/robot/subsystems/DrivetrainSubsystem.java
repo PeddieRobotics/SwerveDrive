@@ -56,9 +56,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public DrivetrainSubsystem() {
 
     frontLeftSwerveModule = new SwerveModule(10,1,11,Math.toRadians(120));//last 2 are random vals. They are canCoder ID and offset angle in radians
-    frontRightSwerveModule = new SwerveModule(2,3,12,Math.toRadians(350));//last 2 are random vals. They are canCoder ID and offset angle in radians
+    frontRightSwerveModule = new SwerveModule(2,3,12,Math.toRadians(341));//last 2 are random vals. They are canCoder ID and offset angle in radians
     backLeftSwerveModule = new SwerveModule(4,5,13,Math.toRadians(325));//last 2 are random vals. They are canCoder ID and offset angle in radians
-    backRightSwerveModule = new SwerveModule(6,7,14,Math.toRadians(265));//last 2 are random vals. They are canCoder ID and offset angle in radianss
+    backRightSwerveModule = new SwerveModule(6,7,14,Math.toRadians(269));//last 2 are random vals. They are canCoder ID and offset angle in radianss
     swerveModules = new SwerveModule[]{frontLeftSwerveModule, frontRightSwerveModule, backLeftSwerveModule, backRightSwerveModule};
     
     frontLeftSwerveModule.initRotationOffset();
