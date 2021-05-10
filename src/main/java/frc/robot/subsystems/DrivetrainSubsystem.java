@@ -55,11 +55,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
 
-    frontLeftSwerveModule = new SwerveModule(10,1,13,Math.PI/2);//last 2 are random vals. They are canCoder ID and offset angle in radians
-    frontRightSwerveModule = new SwerveModule(2,3,14,Math.PI/2);//last 2 are random vals. They are canCoder ID and offset angle in radians
-    backLeftSwerveModule = new SwerveModule(4,5,15,Math.PI/2);//last 2 are random vals. They are canCoder ID and offset angle in radians
-    backRightSwerveModule = new SwerveModule(6,7,16,Math.PI/2);//last 2 are random vals. They are canCoder ID and offset angle in radianss
+    frontLeftSwerveModule = new SwerveModule(10,1,11,Math.toRadians(120));//last 2 are random vals. They are canCoder ID and offset angle in radians
+    frontRightSwerveModule = new SwerveModule(2,3,12,Math.toRadians(350));//last 2 are random vals. They are canCoder ID and offset angle in radians
+    backLeftSwerveModule = new SwerveModule(4,5,13,Math.toRadians(325));//last 2 are random vals. They are canCoder ID and offset angle in radians
+    backRightSwerveModule = new SwerveModule(6,7,14,Math.toRadians(265));//last 2 are random vals. They are canCoder ID and offset angle in radianss
     swerveModules = new SwerveModule[]{frontLeftSwerveModule, frontRightSwerveModule, backLeftSwerveModule, backRightSwerveModule};
+    
+    frontLeftSwerveModule.initRotationOffset();
+    frontRightSwerveModule.initRotationOffset();
+    backLeftSwerveModule.initRotationOffset();
+    backRightSwerveModule.initRotationOffset();
   }
 
   public static DrivetrainSubsystem getInstance(){
@@ -91,7 +96,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // Update each swerve module according to the SwerveModuleStates computed by WPILib
     for(int i = 0; i < swerveModules.length; i++){
-      swerveModules[i].setPIDFDrive(SmartDashboard.getNumber("Drive P", 0.0), SmartDashboard.getNumber("Drive I", 0.0), SmartDashboard.getNumber("Drive D", 0.0), SmartDashboard.getNumber("Drive FF", 0.0));
+      swerveModules[i].setPIDFDrive(SmartDashboard.getNumber("Drive P", 0.15), SmartDashboard.getNumber("Drive I", 0.0), SmartDashboard.getNumber("Drive D", 0.0), SmartDashboard.getNumber("Drive FF", 0.0));
       swerveModules[i].setPIDFAngle(SmartDashboard.getNumber("Angle P", 0.0), SmartDashboard.getNumber("Angle I", 0.0), SmartDashboard.getNumber("Angle D", 0.0), SmartDashboard.getNumber("Angle FF", 0.0));
       swerveModules[i].setDesiredState(swerveModuleStates[i]);
     }
@@ -132,7 +137,6 @@ public void periodic(){
   } catch (Exception e) {
     //TODO: handle exception
   }
-
 
   try{
     SmartDashboard.putNumber("FL Motor WPILib m/s", swerveModuleStates[0].speedMetersPerSecond);
