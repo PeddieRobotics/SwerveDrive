@@ -81,7 +81,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     ChassisSpeeds speeds;
     // Convert the inputs from the controller into a vector of desired translational/rotational speeds for the robot
     if(fieldOriented) {
-      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation, Rotation2d.fromDegrees(gyroscope.getAngle()));
+      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(5.0*translation.getX(), 5.0*translation.getY(), 8.0*rotation, Rotation2d.fromDegrees(gyroscope.getAngle()));
     } else {
       speeds = new ChassisSpeeds(5.0*translation.getX(), 5.0*translation.getY(), 8.0*rotation);
     }
