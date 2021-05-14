@@ -67,7 +67,6 @@ public class SwerveModule {
         m_turningEncoder.setPositionConversionFactor((2.0*Math.PI)/Constants.ANGLE_GEAR_RATIO);
         
         anglePIDController = new PIDController(0.15, 0, 0);
-        //anglePIDController = new ProfiledPIDController(0.5, 0, 0, new TrapezoidProfile.Constraints(2*Math.PI, 2*Math.PI));
         anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
         angleFF = new SimpleMotorFeedforward(1, 0.5);
 
@@ -85,27 +84,23 @@ public class SwerveModule {
     
     public SwerveModuleState getCurrentState(){
         return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(normalizeAngle(m_turningEncoder.getPosition())));
-        //return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(m_turningEncoder.getPosition()));
     }
 
     public SwerveModuleState getDesiredState(){
         return state;
     }
 
-    public void setDesiredState(SwerveModuleState desiredState){
+    public void setDesiredState(SwerveModuleState desiredState){//gives the module its desired state and moves it to its desired wheel velocity and angular position
       state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getPosition()));
-    
-      driveMotor.getPIDController().setReference(state.speedMetersPerSecond, ControlType.kVelocity); 
-      
+
       angleOutput = anglePIDController.calculate(normalizeAngle(m_turningEncoder.getPosition()), state.angle.getRadians());
       finalAngle = angleOutput;
-      //final double angleFFUpdate = angleFF.calculate(anglePIDController.getSetpoint().velocity);
-      angleMotor.set(angleOutput);
-  
-      //angleMotor.getPIDController().setReference(state.angle.getRadians(), ControlType.kPosition);
+      
+      driveMotor.getPIDController().setReference(state.speedMetersPerSecond, ControlType.kVelocity); 
+      angleMotor.set(angleOutput);  
     }
 
-    public double normalizeAngle(double rad){
+    public double normalizeAngle(double rad){//takes angle measure and normalizes it to its equivalent value between PI and -PI
         double angle = rad % (2.0 * Math.PI);
         if (angle > Math.PI){
             angle = angle - 2.0*Math.PI;
@@ -117,11 +112,8 @@ public class SwerveModule {
     }
 
     public Rotation2d getCanCoderAngle() {
-
         double unsignedAngle = (Units.degreesToRadians(canCoder.getAbsolutePosition()) - offset.getRadians()) % (2 * Math.PI);
-
         return new Rotation2d(unsignedAngle);
-
     }
 
     public void initRotationOffset() {
@@ -153,6 +145,5 @@ public class SwerveModule {
     public double getFinalAngle(){
         return finalAngle;
     }
-
 
 }

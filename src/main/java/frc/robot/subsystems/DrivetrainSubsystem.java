@@ -38,11 +38,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private final SwerveModule[] swerveModules;
   private SwerveModuleState[] swerveModuleStates;
   private final SwerveModule frontLeftSwerveModule, frontRightSwerveModule, backLeftSwerveModule, backRightSwerveModule;
-
-  //private final AnalogInput frontLeftAngleEncoder = new AnalogInput(1); //random numbers
-  //private final AnalogInput frontRightAngleEncoder = new AnalogInput(3); //random numbers
-  //private final AnalogInput backLeftAngleEncoder = new AnalogInput(5); //random numbers
-  //private final AnalogInput backRightAngleEncoder = new AnalogInput(7); //random numbers
   
   /** Creation of Swerve modules relative to the robot center */
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -91,9 +86,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("ChassisSpeed rot (r/s)", speeds.omegaRadiansPerSecond);
 
     swerveModuleStates = kinematics.toSwerveModuleStates(speeds); // calculate the states of the individual swerve modules from the global vector
-
-    //SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, 3.0);
-
+    
     // Update each swerve module according to the SwerveModuleStates computed by WPILib
     for(int i = 0; i < swerveModules.length; i++){
       swerveModules[i].setPIDFDrive(SmartDashboard.getNumber("Drive P", 0.15), SmartDashboard.getNumber("Drive I", 0.0), SmartDashboard.getNumber("Drive D", 0.0), SmartDashboard.getNumber("Drive FF", 0.0));
