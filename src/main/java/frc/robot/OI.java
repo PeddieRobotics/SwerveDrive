@@ -27,20 +27,27 @@ public class OI {
       }
 
     public double getForward(){
-        return driverXboxController.getRawAxis(1);
+        if(Math.abs(driverXboxController.getRawAxis(1)) > 0.2){
+            return driverXboxController.getRawAxis(1); 
+        }
+        else{
+            return 0.0;
+        }
     }
     public double getStrafe(){
-        return driverXboxController.getRawAxis(0);
+        if(Math.abs(driverXboxController.getRawAxis(0)) > 0.2){
+            return driverXboxController.getRawAxis(0);
+        }
+        else{
+            return 0.0;
+        }
     }
     public double getRotation(){
-        return driverXboxController.getRawAxis(4);
+        if(Math.abs(driverXboxController.getRawAxis(4)) > 0.2){
+            return driverXboxController.getRawAxis(4);
+        }
+        else{
+            return 0.0;
+        }
     }
-    
-    // public Joystick getLeftJoystick() {
-    //     return leftJoystick;
-    // }
-
-    // public Joystick getRightJoystick() {
-    //     return rightJoystick;
-    // }
 }

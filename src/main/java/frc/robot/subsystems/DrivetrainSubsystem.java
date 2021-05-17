@@ -29,77 +29,37 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private static DrivetrainSubsystem instance;
   private ADIS16470_IMU gyroscope = new ADIS16470_IMU();
 
-  /** Robot Dimensions **/
-  // private static final double TRACKWIDTH = 19.0 //
-  // private static final double WHEELBASE = 23.5;  //NEED TO CHANGE THIS FOR OUR ROBOT
-
   /**Angle Offsets */
   private static final double FRONT_LEFT_ANGLE_OFFSET = -Math.toRadians(0.0); //external magnet encoder - internal motor encoder
   private static final double FRONT_RIGHT_ANGLE_OFFSET = -Math.toRadians(0.0); //external magnet encoder - internal motor encoder
   private static final double BACK_LEFT_ANGLE_OFFSET = -Math.toRadians(0.0); //external magnet encoder - internal motor encoder
   private static final double BACK_RIGHT_ANGLE_OFFSET = -Math.toRadians(0.0); //external magnet encoder - internal motor encoder
 
-  /**Time to build the Swerve Modules!! 
-   * All the following port numbers are currently meaningless and random
-  */
+  private final SwerveModule[] swerveModules;
+  private SwerveModuleState[] swerveModuleStates;
+  private final SwerveModule frontLeftSwerveModule, frontRightSwerveModule, backLeftSwerveModule, backRightSwerveModule;
   
-  private final CANSparkMax frontLeftDriveMotor  = new CANSparkMax(10, MotorType.kBrushless);
-  private final CANSparkMax frontLeftAngleMotor = new CANSparkMax(1, MotorType.kBrushless);
-  private final CANSparkMax frontRightDriveMotor = new CANSparkMax(2, MotorType.kBrushless);
-  private final CANSparkMax frontRightAngleMotor  = new CANSparkMax(3, MotorType.kBrushless);
-  private final CANSparkMax backLeftDriveMotor = new CANSparkMax(4, MotorType.kBrushless);
-  private final CANSparkMax backLeftAngleMotor  = new CANSparkMax(5, MotorType.kBrushless);
-  private final CANSparkMax backRightDriveMotor = new CANSparkMax(6, MotorType.kBrushless);
-  private final CANSparkMax backRightAngleMotor = new CANSparkMax(7, MotorType.kBrushless);
-
-  private final CANSparkMax[] swerveMotors = {frontLeftDriveMotor,frontLeftAngleMotor,frontRightDriveMotor,frontRightAngleMotor,backLeftDriveMotor,backLeftAngleMotor,backRightDriveMotor,backRightAngleMotor};
-
-  private final AnalogInput frontLeftAngleEncoder = new AnalogInput(1); //random numbers
-  private final AnalogInput frontRightAngleEncoder = new AnalogInput(3); //random numbers
-  private final AnalogInput backLeftAngleEncoder = new AnalogInput(5); //random numbers
-  private final AnalogInput backRightAngleEncoder = new AnalogInput(7); //random numbers
-  
-  private final CANEncoder frontLeftDriveCANEncoder = frontLeftDriveMotor.getEncoder();  
-  private final CANEncoder frontRightDriveCANEncoder = frontRightDriveMotor.getEncoder(); 
-  private final CANEncoder backLeftDriveCANEncoder = backLeftDriveMotor.getEncoder();
-  private final CANEncoder backRightDriveCANEncoder = backRightDriveMotor.getEncoder(); 
-  private final CANEncoder frontLeftAngleCANEncoder = frontLeftAngleMotor.getEncoder();  
-  private final CANEncoder frontRightAngleCANEncoder = frontLeftAngleMotor.getEncoder(); 
-  private final CANEncoder backLeftAngleCANEncoder = frontLeftAngleMotor.getEncoder();
-  private final CANEncoder backRightAngleCANEncoder = frontLeftAngleMotor.getEncoder(); 
-
-  private final PIDController frontLeftDriveController = new PIDController(0.18, 0, 0); //random numbers
-  private final PIDController frontRightDriveController = new PIDController(0.18, 0, 0); //random numbers
-  private final PIDController backLeftDriveController = new PIDController(0.18, 0, 0); //random numbers
-  private final PIDController backRightDriveController = new PIDController(0.18, 0, 0); //random numbers
-
-  private final PIDController frontLeftAngleController = new PIDController(0.18, 0, 0); //random numbers
-  private final PIDController frontRightAngleController = new PIDController(0.18, 0, 0); //random numbers
-  private final PIDController backLeftAngleController = new PIDController(0.18, 0, 0); //random numbers
-  private final PIDController backRightAngleController = new PIDController(0.18, 0, 0); //random numbers
-
-
-
   /** Creation of Swerve modules relative to the robot center */
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-    new Translation2d(Constants.TRACKWIDTH_M/2.0, Constants.WHEELBASE_M/2.0),
-    new Translation2d(Constants.TRACKWIDTH_M/2.0, -Constants.WHEELBASE_M/2.0),
-    new Translation2d(-Constants.TRACKWIDTH_M/2.0, Constants.WHEELBASE_M/2.0),
-    new Translation2d(-Constants.TRACKWIDTH_M/2.0, -Constants.WHEELBASE_M/2.0)
+    new Translation2d(Constants.WHEELBASE_M/2.0, Constants.TRACKWIDTH_M/2.0),
+    new Translation2d(Constants.WHEELBASE_M/2.0, -Constants.TRACKWIDTH_M/2.0),
+    new Translation2d(-Constants.WHEELBASE_M/2.0, Constants.TRACKWIDTH_M/2.0),
+    new Translation2d(-Constants.WHEELBASE_M/2.0, -Constants.TRACKWIDTH_M/2.0)
   );
 
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
 
-    frontLeftDriveMotor.getPIDController().setP(0.00018);
-    frontRightDriveMotor.getPIDController().setP(0.00018);
-    backLeftDriveMotor.getPIDController().setP(0.00018);
-    backRightDriveMotor.getPIDController().setP(0.00018);
+    frontLeftSwerveModule = new SwerveModule(10,1,11,Math.toRadians(120));//last 2 are random vals. They are canCoder ID and offset angle in radians
+    frontRightSwerveModule = new SwerveModule(2,3,12,Math.toRadians(341));//last 2 are random vals. They are canCoder ID and offset angle in radians
+    backLeftSwerveModule = new SwerveModule(4,5,13,Math.toRadians(325));//last 2 are random vals. They are canCoder ID and offset angle in radians
+    backRightSwerveModule = new SwerveModule(6,7,14,Math.toRadians(269));//last 2 are random vals. They are canCoder ID and offset angle in radianss
+    swerveModules = new SwerveModule[]{frontLeftSwerveModule, frontRightSwerveModule, backLeftSwerveModule, backRightSwerveModule};
     
-    frontLeftAngleMotor.getPIDController().setP(0.018);
-    frontRightAngleMotor.getPIDController().setP(0.018);
-    backLeftAngleMotor.getPIDController().setP(0.018);
-    backRightAngleMotor.getPIDController().setP(0.018);
+    frontLeftSwerveModule.initRotationOffset();
+    frontRightSwerveModule.initRotationOffset();
+    backLeftSwerveModule.initRotationOffset();
+    backRightSwerveModule.initRotationOffset();
   }
 
   public static DrivetrainSubsystem getInstance(){
@@ -108,127 +68,56 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
     return instance;
   }
-
-
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-
-  }
   
   public void drive(Translation2d translation, double rotation, boolean fieldOriented) {
-    // rotation *= 2.0 / Math.hypot(Constants.WHEELBASE_M, Constants.TRACKWIDTH_M);
-    SmartDashboard.putNumber("getX", translation.getX());
-    SmartDashboard.putNumber("getY", translation.getY());
 
     ChassisSpeeds speeds;
+    // Convert the inputs from the controller into a vector of desired translational/rotational speeds for the robot
     if(fieldOriented) {
-      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(translation.getX(), translation.getY(), rotation, Rotation2d.fromDegrees(gyroscope.getAngle()));
+      speeds = ChassisSpeeds.fromFieldRelativeSpeeds(5.0*translation.getX(), 5.0*translation.getY(), 8.0*rotation, Rotation2d.fromDegrees(gyroscope.getAngle()));
     } else {
-      speeds = new ChassisSpeeds(translation.getX(), translation.getY(), rotation);
+      speeds = new ChassisSpeeds(5.0*translation.getX(), 5.0*translation.getY(), 8.0*rotation);
     }
-    SmartDashboard.putNumber("ChassisSpeed x", speeds.vxMetersPerSecond);
-    SmartDashboard.putNumber("ChassisSpeed y", speeds.vyMetersPerSecond);
-    SmartDashboard.putNumber("ChassisSpeed rotation in r/s", speeds.omegaRadiansPerSecond);
 
-      SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds); //makes a SwerveModuleState array out of the ChassisSpeeds
-       // Front left module state
-      SwerveModuleState frontLeft = states[0];
+    SmartDashboard.putNumber("ChassisSpeed x (m/s)", speeds.vxMetersPerSecond);
+    SmartDashboard.putNumber("ChassisSpeed y (m/s)", speeds.vyMetersPerSecond);
+    SmartDashboard.putNumber("ChassisSpeed rot (r/s)", speeds.omegaRadiansPerSecond);
 
-      // Front right module state
-      SwerveModuleState frontRight = states[1];
+    swerveModuleStates = kinematics.toSwerveModuleStates(speeds); // calculate the states of the individual swerve modules from the global vector
+    
+    // Update each swerve module according to the SwerveModuleStates computed by WPILib
+    for(int i = 0; i < swerveModules.length; i++){
+      swerveModules[i].setDesiredState(swerveModuleStates[i]);
+    }
 
-      // Back left module state
-      SwerveModuleState backLeft = states[2];
-
-      // Back right module state
-      SwerveModuleState backRight = states[3];
-     
-      double frontLeftMotorSetpoint = frontLeft.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.DRIVE_GEAR_RATIO; // This is in rpm
-      frontLeftDriveMotor.getPIDController().setReference(frontLeftMotorSetpoint, ControlType.kVelocity); 
-      double frontLeftAngleSetpoint = frontLeft.angle.getRadians() / (2 * Math.PI) * Constants.ANGLE_GEAR_RATIO;  // This is in # of rotations
-      frontLeftAngleMotor.getPIDController().setReference(frontLeftAngleSetpoint, ControlType.kPosition);
-
-      double frontRightMotorSetpoint = frontRight.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.DRIVE_GEAR_RATIO; // This is in rpm
-      frontRightDriveMotor.getPIDController().setReference(frontRightMotorSetpoint, ControlType.kVelocity);
-      double frontRightAngleSetpoint = frontRight.angle.getRadians() / (2 * Math.PI) * Constants.ANGLE_GEAR_RATIO;  // This is in # of rotations
-      frontRightAngleMotor.getPIDController().setReference(frontRightAngleSetpoint, ControlType.kPosition);
-      
-      double backLeftMotorSetpoint = backLeft.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.DRIVE_GEAR_RATIO; // This is in rpm
-      backLeftDriveMotor.getPIDController().setReference(backLeftMotorSetpoint, ControlType.kVelocity);
-      double backLeftAngleSetpoint = backLeft.angle.getRadians() / (2 * Math.PI) * Constants.ANGLE_GEAR_RATIO;  // This is in # of rotations
-      backLeftAngleMotor.getPIDController().setReference(backLeftAngleSetpoint, ControlType.kPosition);
-
-      double backRightMotorSetpoint = backRight.speedMetersPerSecond * Constants.METERS_PER_SEC_TO_RPM * Constants.DRIVE_GEAR_RATIO;// This is in rpm
-      backRightDriveMotor.getPIDController().setReference(backRightMotorSetpoint, ControlType.kVelocity);
-      double backRightAngleSetpoint = backRight.angle.getRadians() / (2 * Math.PI) * Constants.ANGLE_GEAR_RATIO; // This is in # of rotations
-      backRightAngleMotor.getPIDController().setReference(backRightAngleSetpoint, ControlType.kPosition);
-
-  
-      SmartDashboard.putNumber("FL Motor WPILib m/s", frontLeft.speedMetersPerSecond);
-      // SmartDashboard.putNumber("FL Angle WPILib rad", frontLeft.angle.getRadians());
-      SmartDashboard.putNumber("BL Motor WPILib m/s", backLeft.speedMetersPerSecond);
-      // SmartDashboard.putNumber("BL Angle WPILib rad", backLeft.angle.getRadians());
-      SmartDashboard.putNumber("FR Motor WPILib m/s", frontRight.speedMetersPerSecond);
-      // SmartDashboard.putNumber("FR Angle WPILib rad", frontRight.angle.getRadians());
-      SmartDashboard.putNumber("BR Motor WPILib m/s", backRight.speedMetersPerSecond);
-      // SmartDashboard.putNumber("BR Angle WPILib rad", backRight.angle.getRadians());
-
-      SmartDashboard.putNumber("FL Motor Setpoint", frontLeftMotorSetpoint);
-      SmartDashboard.putNumber("FL Angle Setpoint", frontLeftAngleSetpoint);
-      SmartDashboard.putNumber("BL Motor Setpoint", backLeftMotorSetpoint);
-      SmartDashboard.putNumber("BL Angle Setpoint", backLeftAngleSetpoint);
-      SmartDashboard.putNumber("FR Motor Setpoint", frontRightMotorSetpoint);
-      SmartDashboard.putNumber("FR Angle Setpoint", frontRightAngleSetpoint);
-      SmartDashboard.putNumber("BR Motor Setpoint", backRightMotorSetpoint);
-      SmartDashboard.putNumber("BR Angle Setpoint", backRightAngleSetpoint);
-
-      SmartDashboard.putNumber("FR Motor P", frontRightDriveMotor.getPIDController().getP());
-      SmartDashboard.putNumber("FR Motor I", frontRightDriveMotor.getPIDController().getI());
-      SmartDashboard.putNumber("FR Motor D", frontRightDriveMotor.getPIDController().getD());
-      
   }
 
 public void resetGyroscope() {
 	gyroscope.reset();
 }
 
-public void setMotor(int motorID, double setpoint){
+public SwerveModule getFrontLeftSwerveModule(){
+  return frontLeftSwerveModule;
+}
 
-  if(setpoint <= 0.3){
-    swerveMotors[motorID % 10].set(setpoint);
-  }
-  
-  /*
-  switch (motorID){
-    case 10:
-      frontLeftDriveMotor.set(setpoint);
-      break;
-    case 1:
-      frontLeftAngleMotor.set(setpoint);
-      break;
-    case 2:
-      frontRightDriveMotor.set(setpoint);
-      break;
-    case 3:
-      frontRightAngleMotor.set(setpoint);
-      break;
-    case 4:
-      backLeftDriveMotor.set(setpoint);
-      break;
-    case 5:
-      backLeftAngleMotor.set(setpoint);
-      break;
-    case 6:
-      backRightDriveMotor.set(setpoint);
-      break;
-    case 7:
-      backRightAngleMotor.set(setpoint);
-      break;
-    default:
-      break;
-  }*/
+public SwerveModule getFrontRightSwerveModule(){
+  return frontRightSwerveModule;
+}
+
+public SwerveModule getBackLeftSwerveModule(){
+  return backLeftSwerveModule;
+}
+
+public SwerveModule getBackRightSwerveModule(){
+  return backRightSwerveModule;
+}
+
+public SwerveModule[] getSwerveModules(){
+  return swerveModules;
+}
+
+@Override
+public void periodic(){
 }
 
 }

@@ -32,6 +32,15 @@ public class RobotContainer {
 
     // Set up a default command to ensure the robot drives by default
     m_DrivetrainSubsystem.setDefaultCommand(new SwerveDriveCommand());
+
+    SmartDashboard.putNumber("Drive P", 0.0);
+    SmartDashboard.putNumber("Drive I", 0.0);
+    SmartDashboard.putNumber("Drive D", 0.0);
+    SmartDashboard.putNumber("Drive FF", 0.0);
+    SmartDashboard.putNumber("Angle P", 0.0);
+    SmartDashboard.putNumber("Angle I", 0.0);
+    SmartDashboard.putNumber("Angle D", 0.0);
+    SmartDashboard.putNumber("Angle FF", 0.0);
   }
 
   
@@ -55,26 +64,38 @@ public class RobotContainer {
 
 
 public void setupSmartDashboardTestMode() {
-  SmartDashboard.putNumber("Front Left Drive", 0.0);
-  SmartDashboard.putNumber("Front Left Angle", 0.0);
-  SmartDashboard.putNumber("Front Right Drive", 0.0);
-  SmartDashboard.putNumber("Front Right Angle", 0.0);
-  SmartDashboard.putNumber("Back Left Drive", 0.0);
-  SmartDashboard.putNumber("Back Left Angle", 0.0);
-  SmartDashboard.putNumber("Back Right Drive", 0.0);
-  SmartDashboard.putNumber("Back Right Angle", 0.0);
+  SmartDashboard.putNumber("FL Drive", 0.0);
+  SmartDashboard.putNumber("FL Angle", 0.0);
+  SmartDashboard.putNumber("FR Drive", 0.0);
+  SmartDashboard.putNumber("FR Angle", 0.0);
+  SmartDashboard.putNumber("BL Drive", 0.0);
+  SmartDashboard.putNumber("BL Angle", 0.0);
+  SmartDashboard.putNumber("BR Drive", 0.0);
+  SmartDashboard.putNumber("BR Angle", 0.0);
 }
 
 
 public void testAllSystems(){
-  m_DrivetrainSubsystem.setMotor(10 ,SmartDashboard.getNumber("Front Left Drive", 0.0));
-  m_DrivetrainSubsystem.setMotor(1 ,SmartDashboard.getNumber("Front Left Angle", 0.0));
-  m_DrivetrainSubsystem.setMotor(2 ,SmartDashboard.getNumber("Front Right Drive", 0.0));
-  m_DrivetrainSubsystem.setMotor(3 ,SmartDashboard.getNumber("Front Right Angle", 0.0));
-  m_DrivetrainSubsystem.setMotor(4 ,SmartDashboard.getNumber("Back Left Drive", 0.0));
-  m_DrivetrainSubsystem.setMotor(5 ,SmartDashboard.getNumber("Back Left Angle", 0.0));
-  m_DrivetrainSubsystem.setMotor(6 ,SmartDashboard.getNumber("Back Right Drive", 0.0));
-  m_DrivetrainSubsystem.setMotor(7 ,SmartDashboard.getNumber("Back Right Angle", 0.0));
+  m_DrivetrainSubsystem.getFrontLeftSwerveModule().setDriveMotor(SmartDashboard.getNumber("FL Drive",0.0));
+  m_DrivetrainSubsystem.getFrontLeftSwerveModule().setAngleMotor(SmartDashboard.getNumber("FL Angle", 0.0));
+  m_DrivetrainSubsystem.getFrontRightSwerveModule().setDriveMotor(SmartDashboard.getNumber("FR Drive", 0.0));
+  m_DrivetrainSubsystem.getFrontRightSwerveModule().setAngleMotor(SmartDashboard.getNumber("FR Angle", 0.0));
+  m_DrivetrainSubsystem.getBackLeftSwerveModule().setDriveMotor(SmartDashboard.getNumber("BL Drive", 0.0));
+  m_DrivetrainSubsystem.getBackLeftSwerveModule().setAngleMotor(SmartDashboard.getNumber("BL Angle", 0.0));
+  m_DrivetrainSubsystem.getBackRightSwerveModule().setDriveMotor(SmartDashboard.getNumber("BR Drive", 0.0));
+  m_DrivetrainSubsystem.getBackRightSwerveModule().setAngleMotor(SmartDashboard.getNumber("BR Angle", 0.0));
+
+}
+
+public void reportAllSwerveModuleStates(){
+  SmartDashboard.putNumber("FL Drive State", m_DrivetrainSubsystem.getSwerveModules()[0].getCurrentState().speedMetersPerSecond);
+  SmartDashboard.putNumber("FL Angle State", m_DrivetrainSubsystem.getSwerveModules()[0].getCurrentState().angle.getRadians());
+  SmartDashboard.putNumber("FR Drive State", m_DrivetrainSubsystem.getSwerveModules()[1].getCurrentState().speedMetersPerSecond);
+  SmartDashboard.putNumber("FR Angle State", m_DrivetrainSubsystem.getSwerveModules()[1].getCurrentState().angle.getRadians());
+  SmartDashboard.putNumber("BL Drive State", m_DrivetrainSubsystem.getSwerveModules()[2].getCurrentState().speedMetersPerSecond);
+  SmartDashboard.putNumber("BL Angle State", m_DrivetrainSubsystem.getSwerveModules()[2].getCurrentState().angle.getRadians());
+  SmartDashboard.putNumber("BR Drive State", m_DrivetrainSubsystem.getSwerveModules()[3].getCurrentState().speedMetersPerSecond);
+  SmartDashboard.putNumber("BR Angle State", m_DrivetrainSubsystem.getSwerveModules()[3].getCurrentState().angle.getRadians());
 
 }
 
