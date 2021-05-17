@@ -87,8 +87,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     // Update each swerve module according to the SwerveModuleStates computed by WPILib
     for(int i = 0; i < swerveModules.length; i++){
-      //swerveModules[i].setPIDFDrive(SmartDashboard.getNumber("Drive P", 0.15), SmartDashboard.getNumber("Drive I", 0.0), SmartDashboard.getNumber("Drive D", 0.0), SmartDashboard.getNumber("Drive FF", 0.0));
-      //swerveModules[i].setPIDFAngle(SmartDashboard.getNumber("Angle P", 0.0), SmartDashboard.getNumber("Angle I", 0.0), SmartDashboard.getNumber("Angle D", 0.0), SmartDashboard.getNumber("Angle FF", 0.0));
       swerveModules[i].setDesiredState(swerveModuleStates[i]);
     }
 
