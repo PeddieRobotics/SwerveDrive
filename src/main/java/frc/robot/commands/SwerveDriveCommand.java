@@ -31,26 +31,18 @@ public class SwerveDriveCommand extends CommandBase {
   public void execute() {
 
     double forward = -OI.getInstance().getForward();
-    SmartDashboard.putNumber("Forward after neg sign", forward);
     //not using a deadband because it would not allow continuous motion in certain situations
     forward = Math.copySign(Math.pow(forward, 2.0), forward); // square joystick input while keeping its sign
     
     double strafe = -OI.getInstance().getStrafe();
-    SmartDashboard.putNumber("Strafe after neg sign", strafe);
     //not using a deadband because it would not allow continuous motion in certain situations
     strafe = Math.copySign(Math.pow(strafe, 2.0), strafe); // square joystick input while keeping its sign
   
     double rotation = -OI.getInstance().getRotation();  
-    SmartDashboard.putNumber("Rotation after neg sign", rotation);
     //not using a deadband because it would not allow continuous motion in certain cituations
     rotation = Math.copySign(Math.pow(rotation, 2.0), rotation); // square joystick input while keeping its sign
 
     drivetrain.drive(new Translation2d(forward, strafe), rotation, true);
-
-
-    SmartDashboard.putNumber("Forward squared", forward);
-    SmartDashboard.putNumber("Strafe squared", strafe);
-    SmartDashboard.putNumber("Rotation squared", rotation);
   }
 
   // Called once the command ends or is interrupted.

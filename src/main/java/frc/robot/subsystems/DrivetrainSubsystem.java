@@ -70,8 +70,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
   
   public void drive(Translation2d translation, double rotation, boolean fieldOriented) {
-    SmartDashboard.putNumber("getInputX", translation.getX());
-    SmartDashboard.putNumber("getInputY", translation.getY());
 
     ChassisSpeeds speeds;
     // Convert the inputs from the controller into a vector of desired translational/rotational speeds for the robot
@@ -89,8 +87,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     // Update each swerve module according to the SwerveModuleStates computed by WPILib
     for(int i = 0; i < swerveModules.length; i++){
-      swerveModules[i].setPIDFDrive(SmartDashboard.getNumber("Drive P", 0.15), SmartDashboard.getNumber("Drive I", 0.0), SmartDashboard.getNumber("Drive D", 0.0), SmartDashboard.getNumber("Drive FF", 0.0));
-      swerveModules[i].setPIDFAngle(SmartDashboard.getNumber("Angle P", 0.0), SmartDashboard.getNumber("Angle I", 0.0), SmartDashboard.getNumber("Angle D", 0.0), SmartDashboard.getNumber("Angle FF", 0.0));
+      //swerveModules[i].setPIDFDrive(SmartDashboard.getNumber("Drive P", 0.15), SmartDashboard.getNumber("Drive I", 0.0), SmartDashboard.getNumber("Drive D", 0.0), SmartDashboard.getNumber("Drive FF", 0.0));
+      //swerveModules[i].setPIDFAngle(SmartDashboard.getNumber("Angle P", 0.0), SmartDashboard.getNumber("Angle I", 0.0), SmartDashboard.getNumber("Angle D", 0.0), SmartDashboard.getNumber("Angle FF", 0.0));
       swerveModules[i].setDesiredState(swerveModuleStates[i]);
     }
 
@@ -122,61 +120,6 @@ public SwerveModule[] getSwerveModules(){
 
 @Override
 public void periodic(){
-  try {
-    SmartDashboard.putNumber("FL Angle Output", swerveModules[0].getAngleOutput());
-    SmartDashboard.putNumber("FR Angle Output", swerveModules[1].getAngleOutput());
-    SmartDashboard.putNumber("BL Angle Output", swerveModules[2].getAngleOutput());
-    SmartDashboard.putNumber("BR Angle Output", swerveModules[3].getAngleOutput());
-  } catch (Exception e) {
-    //TODO: handle exception
-  }
-
-  try{
-    SmartDashboard.putNumber("FL Motor WPILib m/s", swerveModuleStates[0].speedMetersPerSecond);
-    SmartDashboard.putNumber("FL Angle WPILib rad", swerveModuleStates[0].angle.getRadians());
-    SmartDashboard.putNumber("BL Motor WPILib m/s", swerveModuleStates[1].speedMetersPerSecond);
-    SmartDashboard.putNumber("BL Angle WPILib rad", swerveModuleStates[1].angle.getRadians());
-    SmartDashboard.putNumber("FR Motor WPILib m/s", swerveModuleStates[2].speedMetersPerSecond);
-    SmartDashboard.putNumber("FR Angle WPILib rad", swerveModuleStates[2].angle.getRadians());
-    SmartDashboard.putNumber("BR Motor WPILib m/s", swerveModuleStates[3].speedMetersPerSecond);
-    SmartDashboard.putNumber("BR Angle WPILib rad", swerveModuleStates[3].angle.getRadians());
-  } catch(NullPointerException e){
-  }
-
-  try{
-    SmartDashboard.putNumber("FL Drive State", swerveModules[0].getCurrentState().speedMetersPerSecond);
-    SmartDashboard.putNumber("FL Angle State", swerveModules[0].getCurrentState().angle.getRadians());
-    SmartDashboard.putNumber("BL Drive State", swerveModules[1].getCurrentState().speedMetersPerSecond);
-    SmartDashboard.putNumber("BL Angle State", swerveModules[1].getCurrentState().angle.getRadians());
-    SmartDashboard.putNumber("FR Drive State", swerveModules[2].getCurrentState().speedMetersPerSecond);
-    SmartDashboard.putNumber("FR Angle State", swerveModules[2].getCurrentState().angle.getRadians());
-    SmartDashboard.putNumber("BR Drive State", swerveModules[3].getCurrentState().speedMetersPerSecond);
-    SmartDashboard.putNumber("BR Angle State", swerveModules[3].getCurrentState().angle.getRadians());
-  } catch(NullPointerException e){
-  }
-
-
-  try{
-    SmartDashboard.putNumber("FL Drive Optimized", swerveModules[0].getDesiredState().speedMetersPerSecond);
-    SmartDashboard.putNumber("FL Angle Optimized", swerveModules[0].getDesiredState().angle.getRadians());
-    SmartDashboard.putNumber("BL Drive Optimized", swerveModules[1].getDesiredState().speedMetersPerSecond);
-    SmartDashboard.putNumber("BL Angle Optimized", swerveModules[1].getDesiredState().angle.getRadians());
-    SmartDashboard.putNumber("FR Drive Optimized", swerveModules[2].getDesiredState().speedMetersPerSecond);
-    SmartDashboard.putNumber("FR Angle Optimized", swerveModules[2].getDesiredState().angle.getRadians());
-    SmartDashboard.putNumber("BR Drive Optimized", swerveModules[3].getDesiredState().speedMetersPerSecond);
-    SmartDashboard.putNumber("BR Angle Optimized", swerveModules[3].getDesiredState().angle.getRadians());
-  } catch(NullPointerException e){
-  }
-
-  try{
-    SmartDashboard.putNumber("FL Final Angle", swerveModules[0].getFinalAngle());
-    SmartDashboard.putNumber("BL Final Angle", swerveModules[1].getFinalAngle());
-    SmartDashboard.putNumber("FR Final Angle", swerveModules[2].getFinalAngle());
-    SmartDashboard.putNumber("BR Final Angle", swerveModules[3].getFinalAngle()); 
-  } catch(NullPointerException e){
-
-  }
-
 }
 
 }
